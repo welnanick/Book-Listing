@@ -52,17 +52,23 @@ public final class QueryUtils {
 
                 String title = volumeInfo.getString("title");
                 StringBuilder authorNames = new StringBuilder();
-                JSONArray authors = volumeInfo.getJSONArray("authors");
+                JSONArray authors = volumeInfo.optJSONArray("authors");
 
-                for (int j = 0; j < authors.length(); j++) {
+                if (authors != null) {
+                    for (int j = 0; j < authors.length(); j++) {
 
-                    String author = authors.getString(j);
-                    authorNames.append(author);
-                    if (j != authors.length() - 1) {
+                        String author = authors.getString(j);
+                        authorNames.append(author);
+                        if (j != authors.length() - 1) {
 
-                        authorNames.append(", ");
+                            authorNames.append(", ");
+
+                        }
 
                     }
+                } else {
+
+                    authorNames.append("N/A");
 
                 }
 

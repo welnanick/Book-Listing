@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> data) {
 
         progressBar.setVisibility(View.GONE);
-        if((data == null || data.size() == 0) && searchPerformed) {
+        if ((data == null || data.size() == 0) && searchPerformed) {
 
             emptyView.setText(R.string.no_book_text);
 
