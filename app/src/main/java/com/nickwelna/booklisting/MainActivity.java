@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ProgressBar progressBar;
     private EditText searchBar;
     private List<Book> books;
+    private boolean searchPerformed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View v) {
 
                 bookAdapter.clear();
-                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+                if (searchPerformed) {
+
+                    getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+
+                }
 
                 ConnectivityManager cm =
                         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 if (isConnected) {
 
+                    searchPerformed = true;
                     progressBar.setVisibility(View.VISIBLE);
                     emptyView.setText(""); //Used instead of setting visibility to View.GONE to preserve existing logic
                     getLoaderManager().initLoader(BOOK_LOADER_ID, null, MainActivity.this);
@@ -89,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 } else {
 
                     emptyView.setText(R.string.no_connection);
+                    searchPerformed = false;
 
                 }
 
@@ -126,7 +133,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> data) {
 
         progressBar.setVisibility(View.GONE);
-        emptyView.setText(R.string.no_book_text);
+        if((data == null || data.size() == 0) && searchPerformed) {
+
+            emptyView.setText(R.string.no_book_text);
+
+        }
 
         updateUi(data);
 
