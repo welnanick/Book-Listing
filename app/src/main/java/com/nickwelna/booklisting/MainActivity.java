@@ -10,7 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private BookAdapter bookAdapter;
     private TextView emptyView;
     private ProgressBar progressBar;
+    private EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +39,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ListView bookListView = findViewById(R.id.book_list);
 
         progressBar = findViewById(R.id.progress_bar);
+        searchBar = findViewById(R.id.search_bar);
 
         emptyView = findViewById(R.id.empty_view);
         bookListView.setEmptyView(emptyView);
 
         bookAdapter = new BookAdapter(this, new ArrayList<Book>());
-
         bookListView.setAdapter(bookAdapter);
-
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -60,31 +63,45 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         });
 
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        Button searchButton = findViewById(R.id.search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            @Override
+            public void onClick(View v) {
 
+                ConnectivityManager cm =
+                        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        //TODO: Move this to the search button click
-        if (isConnected) {
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-            getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
+                if (isConnected) {
 
-        } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    emptyView.setText("");
+                    getLoaderManager().initLoader(BOOK_LOADER_ID, null, MainActivity.this);
 
-            progressBar.setVisibility(View.GONE);
-            emptyView.setText(R.string.no_connection);
+                } else {
 
-        }
+                    emptyView.setText(R.string.no_connection);
+
+                }
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
+
+            }
+
+        });
 
     }
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
 
-        return new BookLoader(this, "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=1");
+        String query = searchBar.getText().toString();
+        StringBuilder url = new StringBuilder().append("https://www.googleapis.com/books/v1/volumes?q=").append(query);
+        return new BookLoader(this, url.toString());
 
     }
 

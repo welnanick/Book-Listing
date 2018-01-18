@@ -18,7 +18,8 @@ import java.util.ArrayList;
 
 public final class QueryUtils {
 
-    private QueryUtils() {}
+    private QueryUtils() {
+    }
 
     public static ArrayList<Book> extractBooks(String requestUrl) {
 
@@ -51,7 +52,7 @@ public final class QueryUtils {
                 StringBuilder authorNames = new StringBuilder();
                 JSONArray authors = volumeInfo.getJSONArray("authors");
 
-                for(int j = 0; j < authors.length(); j++) {
+                for (int j = 0; j < authors.length(); j++) {
 
                     String author = authors.getString(j);
                     authorNames.append(author);
@@ -72,7 +73,7 @@ public final class QueryUtils {
 
         } catch (JSONException e) {
 
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
 
         }
 
@@ -80,9 +81,6 @@ public final class QueryUtils {
 
     }
 
-    /**
-     * Returns new URL object from the given string URL.
-     */
     private static URL createUrl(String stringUrl) {
 
         URL url = null;
@@ -99,14 +97,10 @@ public final class QueryUtils {
 
     }
 
-    /**
-     * Make an HTTP request to the given URL and return a String as the response.
-     */
     private static String makeHttpRequest(URL url) throws IOException {
 
         String jsonResponse = "";
 
-        // If the URL is null, then return early.
         if (url == null) {
 
             return jsonResponse;
@@ -123,8 +117,6 @@ public final class QueryUtils {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
-            // If the request was successful (response code 200),
-            // then read the input stream and parse the response.
             if (urlConnection.getResponseCode() == 200) {
 
                 inputStream = urlConnection.getInputStream();
@@ -157,10 +149,6 @@ public final class QueryUtils {
 
     }
 
-    /**
-     * Convert the {@link InputStream} into a String which contains the
-     * whole JSON response from the server.
-     */
     private static String readFromStream(InputStream inputStream) throws IOException {
 
         StringBuilder output = new StringBuilder();

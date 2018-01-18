@@ -1,5 +1,7 @@
 <resources>
+
     <string name="app_name">Book Listing</string>
     <string name="no_connection">No Internet Connection</string>
     <string name="no_book_text">No books found matching query</string>
+
 </resources>
