@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public final class QueryUtils {
 
+    public static final String LOG_TAG = "QueryUtils";
+
     private QueryUtils() {
     }
 
@@ -32,7 +34,7 @@ public final class QueryUtils {
 
         } catch (IOException e) {
 
-            Log.e("QueryUtils", "Problem making http request", e);
+            Log.e(LOG_TAG, "Problem making http request", e);
 
         }
 
@@ -73,7 +75,7 @@ public final class QueryUtils {
 
         } catch (JSONException e) {
 
-            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the book JSON results", e);
 
         }
 
@@ -90,7 +92,7 @@ public final class QueryUtils {
 
         } catch (MalformedURLException e) {
 
-            Log.e("QueryUtils", "Error with creating URL ", e);
+            Log.e(LOG_TAG, "Error with creating URL ", e);
 
         }
         return url;
@@ -124,12 +126,12 @@ public final class QueryUtils {
 
             } else {
 
-                Log.e("QueryUtils", "Error response code: " + urlConnection.getResponseCode());
+                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
 
             }
         } catch (IOException e) {
 
-            Log.e("QueryUtils", "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the book JSON results.", e);
 
         } finally {
 

@@ -4,26 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="16dp">
+    android:paddingBottom="@dimen/padding"
+    android:paddingEnd="@dimen/padding"
+    android:paddingStart="@dimen/padding"
+    android:paddingTop="@dimen/padding">
 
     <TextView
         android:id="@+id/book_title"
+        style="@style/ResultTitleTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        tools:text="Harry Potter and the Goblet of Fire" />
+        tools:text="@string/title_placeholder" />
 
     <TextView
         android:id="@+id/book_author"
+        style="@style/ResultAuthorTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/black"
-        tools:text="J.K. Rowling" />
+        tools:text="@string/author_placeholder" />
 
 </LinearLayout>

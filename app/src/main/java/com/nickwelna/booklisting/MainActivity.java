@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView emptyView;
     private ProgressBar progressBar;
     private EditText searchBar;
+    private List<Book> books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
 
+                bookAdapter.clear();
+                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+
                 ConnectivityManager cm =
                         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 if (isConnected) {
 
                     progressBar.setVisibility(View.VISIBLE);
-                    emptyView.setText("");
+                    emptyView.setText(""); //Used instead of setting visibility to View.GONE to preserve existing logic
                     getLoaderManager().initLoader(BOOK_LOADER_ID, null, MainActivity.this);
 
                 } else {
@@ -94,13 +99,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         });
 
+        if (savedInstanceState != null) {
+
+            List<Book> savedResults = savedInstanceState.getParcelableArrayList("Results");
+            if (savedResults != null) {
+
+                this.books = savedResults;
+                bookAdapter.addAll(savedResults);
+
+            }
+
+        }
+
     }
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
 
         String query = searchBar.getText().toString();
-        StringBuilder url = new StringBuilder().append("https://www.googleapis.com/books/v1/volumes?q=").append(query);
+        StringBuilder url = new StringBuilder().append(getResources().getString(R.string.query_beginning)).append(query);
         return new BookLoader(this, url.toString());
 
     }
@@ -125,12 +142,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void updateUi(final List<Book> books) {
 
         bookAdapter.clear();
+        this.books = books;
 
         if (books != null && !books.isEmpty()) {
 
             bookAdapter.addAll(books);
 
         }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("Results", (ArrayList<? extends Parcelable>) books);
 
     }
 

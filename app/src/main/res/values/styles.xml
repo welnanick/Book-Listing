@@ -8,4 +8,16 @@
 
     </style>
 
+    <style name="ResultAuthorTextStyle" parent="android:TextAppearance.Medium">
+
+        <item name="android:textColor">@color/black</item>
+
+    </style>
+
+    <style name="ResultTitleTextStyle" parent="ResultAuthorTextStyle">
+
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
 </resources>

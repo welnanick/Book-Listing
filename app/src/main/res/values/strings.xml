@@ -3,5 +3,10 @@
     <string name="app_name">Book Listing</string>
     <string name="no_connection">No Internet Connection</string>
     <string name="no_book_text">No books found matching query</string>
+    <string name="query_beginning">https://www.googleapis.com/books/v1/volumes?q=</string>
+    <string name="title_placeholder">Harry Potter and the Goblet of Fire</string>
+    <string name="author_placeholder">J.K. Rowling</string>
+    <string name="search_button_text">Search</string>
+    <string name="enter_query_text">Enter a query above to search for books</string>
 
 </resources>
